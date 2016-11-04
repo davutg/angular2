@@ -12,7 +12,7 @@ import {SearchPipe} from './search-pipe';
   styleUrls: ['css/app.css']
 })
 
-export class AppComponent {
+export class AppComponent {  
   artists = ARTISTS;
   currentArtist: Artist;
 

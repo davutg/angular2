@@ -2,10 +2,16 @@ var gulp = require('gulp'),
     webserver = require('gulp-webserver'),
     typescript = require('gulp-typescript'),
     sourcemaps = require('gulp-sourcemaps'),
+    minify = require('gulp-minify'),
+    del = require('del'),
     tscConfig = require('./tsconfig.json');
-
+    
 var appSrc = 'builds/development/',
     tsSrc = 'process/typescript/';
+
+gulp.task('clean', function() {
+ del([appSrc + 'js/*']);
+});
 
 gulp.task('html', function() {
   gulp.src(appSrc + '**/*.html');
@@ -26,6 +32,19 @@ gulp.task('copylibs', function() {
       'node_modules/angular2/bundles/angular2.dev.js'
     ])
     .pipe(gulp.dest(appSrc + 'js/lib/angular2'));
+});
+
+gulp.task('compress', function() {
+  gulp.src(appSrc + 'js/lib/angular2/*.js')
+    .pipe(minify({
+        ext:{
+            src:'-debug.js',
+            min:'.js'
+        },
+        exclude: ['tasks'],
+        ignoreFiles: ['.combo.js', '-min.js']
+    }))
+    .pipe(gulp.dest(appSrc+'js/lib/angular2/'))
 });
 
 gulp.task('typescript', function () {
